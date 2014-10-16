@@ -1,0 +1,47 @@
+<!DOCTYPE htmlL>
+<html>
+<head>
+  <title>SAPY Demo Page</title>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script type="text/javascript">
+    $( document ).ready(function() {
+        $("#b1").on('click', function() {
+          console.log( 'sending query!' );
+
+          //var host = 'https://qrng.anu.edu.au' //random number server (should not work due to Single Origin Policy)
+          //var host = 'http://localhost:9080' //for local testing (port may vary, HTTPS not supported on localhost)
+          var host = 'https://sapydemo.appspot.com'  //proxy server running on Google App Engine (use this)
+
+          var query_string = '/API/jsonI.php?length=1&type=uint16'
+
+          $.get(host + query_string, function(data, status){
+            output = '[Response]\n\n' + JSON.stringify(data, undefined, 2);
+            console.log(output);
+            $("#output").html(output);
+        });
+      });
+    });
+  </script>
+</head>
+<body>
+  This is a simple demo of SAPY (Project page: <a href="https://github.com/coderiff/sapy">https://github.com/coderiff/sapy</a>)<p>
+  We want to fetch a random number from a public Web service using the following URL: 
+  <a href="https://qrng.anu.edu.au/API/jsonI.php?length=1&type=uint16">https://qrng.anu.edu.au/API/jsonI.php?length=1&type=uint16</a>.<br>
+  It returns a JSON response.<br>
+  The problem is that we cannot query the URL using <a href="http://en.wikipedia.org/wiki/Ajax_(programming)">AJAX</a> 
+  due to <a href="http://en.wikipedia.org/wiki/Same-origin_policy">Same Origin Policy</a> enforced by web browsers.<br>
+  You can work around this by running SAPY on Google App Engine to act as a reverse proxy.<br>
+  SAPY fetches data from the original server (pre-configuration required) 
+  and adds support for <a href="http://en.wikipedia.org/wiki/Cross-origin_resource_sharing">CORS</a> automatically 
+  so you can still fetch the results even if quering a domain with a different origin <br>
+  <p>
+  Press the below button to run the demo.
+  <p>
+
+  <button type="button" id="b1">Run Query using SAPY</button>
+
+  <pre id="output"></pre>
+
+</body>
+</html>
+
